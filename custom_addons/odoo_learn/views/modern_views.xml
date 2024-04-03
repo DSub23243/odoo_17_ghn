@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="modern_view_tree" model="ir.ui.view">
+        <field name="name">modern_view_tree</field>
+        <field name="model">learn.modern</field>
+        <field name="arch" type="xml">
+            <tree string="modern_tree">
+                <field name="name"/>
+                <field name="department"/>
+                <field name="age"/>
+                <field name="sex"/>
+                <field name="phone"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+    <record id="modern_view_form" model="ir.ui.view">
+        <field name="name">modern_view_form</field>
+        <field name="model">learn.modern</field>
+        <field name="arch" type="xml">
+            <form string="modern_form">
+                <sheet>
+                    <header >
+                        <button name="%(reason_wizard_action)d" type="action" string="Leave" class="oe_highlight"/>
+                        <button name="%(reason_wizard_action)d" type="action" string="Onboard" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="name for modern user"/>
+
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+
+                            <field name="department" options="{'no_create': True,'no_open': True}" />
+<!--                            <field name="active_department"/>-->
+                            <field name="age" />
+                            <field name="sex" widget="selection_badges"/>
+                        </group>
+                        <group>
+                            <field name="phone" required="(age != False)"/>
+                            <field name="address"/>
+                            <field name="dob"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" />
+                    </group>
+                    <notebook>
+                        <page string="company">
+                            <field name="company_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+        <record id="modern_search_view" model="ir.ui.view">
+           <field name="name">Modern Search</field>
+           <field name="model">learn.modern</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <filter name="Leave" string="Modern Leave" domain="[('state' , '=', 'leave')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Department Modern" name="Department" domain="[]" context="{'group_by': 'department'}"/>
+                    </group>
+                </search>
+           </field>
+        </record>
+
+    <record id="modern_action" model="ir.actions.act_window">
+        <field name="name">Modern List</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">learn.modern</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <menuitem id="modern_root_menu_id" name="Modern" sequence="2"/>
+    <menuitem id="modern_action_menu_id" name="Modern" parent="modern_root_menu_id" action="modern_action" sequence="1"/>
+        <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="modern_action_menu_id1" name="Manager" parent="modern_root_menu_id" action="modern_action" sequence="2" groups="group_Mordern_manager"/>
+    </data>
+</odoo>

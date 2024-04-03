@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="modern_action_department" model="ir.actions.act_window">
+            <field name="name">Modern List</field>
+            <field name="type">ir.actions.act_window</field>c_phone
+            <field name="res_model">learn.modern</field>
+<!--            so sanh truong dapartment_id ben modern co su trung lap voi truong hien tai ben department lay id trùng lặp đó hiện ra list tree trong department-->
+            <field name="domain">[('department', '=', active_id)]</field>
+        </record>
+
+        <record id="Department_form_view" model="ir.ui.view">
+            <field name="name">Department Form</field>
+            <field name="model">learn.department</field>
+            <field name="arch" type="xml">
+                <form string="ModelTitle">
+                    <header>
+                            <button name="create_modern" string="Generate" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box" position="inside">
+                            <button class="oe_stat_button" type="action" name="odoo_learn.modern_action_department" icon="fa-list-ul">
+                                <field string="Moderns" name="modern_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Name" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <!--<field name="modern_count"/>-->
+                                <field name="age"/>
+                            </group>
+                            <group>
+                                <field name="description"/>
+                            </group>
+
+                        </group>
+                        <notebook>
+                            <page string="modern">
+                                <field name="modern_ids" widget="many2many">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="sex" />
+                                        <field name="phone"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="Department_tree_view" model="ir.ui.view">
+            <field name="name">ProjectName.Department.tree</field>
+            <field name="model">learn.department</field>
+            <field name="arch" type="xml">
+                <tree string="ModelTitle">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="Department_act_window" model="ir.actions.act_window">
+            <field name="name">Department Action</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">learn.department</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Department" id="Department_menu" parent="modern_root_menu_id" action="Department_act_window"/>
+    </data>
+</odoo>

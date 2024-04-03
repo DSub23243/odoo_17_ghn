@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <template id="report_saleorder_document_inherit_image" inherit_id = "sale.report_saleorder_document">
+        <xpath expr="//t/div[hasclass('page')]/table/thead/tr/th[1]" position="before">
+            <th>Image</th>
+        </xpath>
+
+         <xpath expr="//t/div[hasclass('page')]/table/tbody/t/tr/t/td[1]" position="before">
+            <td>
+                <img t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" style="width:100%; height: 10%"/>
+            </td>
+        </xpath>
+    </template>
+    </data>
+</odoo>

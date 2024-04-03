@@ -1,0 +1,32 @@
+//
+// This file is meant to regroup your design customizations. For example, doing
+// this will separate your footer with a dotted border using your primary color.
+//
+// footer {
+//     border-top: 5px dotted map-get($theme-colors, 'primary');
+// }
+//
+.btn-black {
+  color: #fff;
+  background-color: #000000;
+  border-color: #fff;
+  border-radius: 0;
+  width: 200px;
+  height: 50px;
+}
+
+.btn-remove {
+  color: #fff;
+  background-color: black;
+  border: none;
+  border-radius: 0.15rem;
+  width: 100px;
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+.hr_cus > hr {
+  width: 200px;
+  border: 3px solid black;
+  border-radius: 0.25rem;
+}

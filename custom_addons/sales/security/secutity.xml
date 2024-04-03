@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="Sales_category">
+            <field name="name">Diary</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="group_Sales_employee" model="res.groups">
+            <field name="name">Employee</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="sales.Sales_category"/>
+        </record>
+
+        <record id="group_Sales_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="sales.Sales_category"/>
+            <field name="implied_ids" eval="[(4, ref('group_Sales_employee'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="diary_order_rule_sales_manager" model="ir.rule">
+            <field name="name">Diary Order: sales manager access</field>
+            <field name="model_id" ref="sales.model_diary_order"/>
+            <field name="domain_force">[]</field> <!-- Empty domain means full access -->
+            <field name="groups" eval="[(4, ref('sales.group_Sales_manager'))]"/>
+        </record>
+
+        <record id="owner_security_sales_rule" model="ir.rule">
+            <field name="name">Owner Security Sale Rule</field>
+            <field ref="sales.model_diary_order" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('sales.group_Sales_employee'))]"/>
+            <!--<field name="global" eval="1"/> -->
+        </record>
+    </data>
+</odoo>

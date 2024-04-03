@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="Company_form_view" model="ir.ui.view">
+            <field name="name">Company Form</field>
+            <field name="model">learn.company</field>
+            <field name="arch" type="xml">
+                <form string="ModelTitle">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Name for company"/>
+                            </h1>
+                            <field name="code"/>
+                        </div>
+                        <notebook>
+                            <page string="modern">
+                                <field name="modern_ids" widget="many2many_tags"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="Company_tree_view" model="ir.ui.view">
+            <field name="name">Company tree</field>
+            <field name="model">learn.company</field>
+            <field name="arch" type="xml">
+                <tree string="ModelTitle">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="Company_act_window" model="ir.actions.act_window">
+            <field name="name">Company Action</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">learn.company</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Company" id="Company_menu" parent="modern_root_menu_id" action="Company_act_window" sequence="3"/>
+
+    </data>
+</odoo>

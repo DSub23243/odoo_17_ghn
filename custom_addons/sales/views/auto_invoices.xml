@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kế thừa view của sale.order để thêm nút "Tự động" -->
+    <record id="view_order_form_auto_invoice" model="ir.ui.view">
+        <field name="name">sale.order.form.auto.invoice</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm nút "Tự động" sau nút "Xác nhận" -->
+            <!-- Thêm nút "Tự động" sau nút "Xác nhận" -->
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button string="Tự động" name="action_auto_invoice" type="object" class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Định nghĩa action cho nút "Tự động" -->
+    <record id="action_auto_invoice" model="ir.actions.server">
+        <field name="name">Tạo Hóa Đơn Tự Động</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_auto_invoice()
+        </field>
+    </record>
+</odoo>

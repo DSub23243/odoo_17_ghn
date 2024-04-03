@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="Inherit_form_inherit" model="ir.ui.view">
+            <field name="name">Inherit.form</field>
+            <field name="model">learn.modern</field>
+            <field name="inherit_id" ref="odoo_learn.modern_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sex']" position="after">
+                    <field name="code"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

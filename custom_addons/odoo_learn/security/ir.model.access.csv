@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_modern_user,access_modern_user,odoo_learn.model_learn_modern,odoo_learn.group_Mordern_employee,1,0,0,0
+access_modern_manager,access_modern_manager,odoo_learn.model_learn_modern,odoo_learn.group_Mordern_manager,1,1,1,1
+
+access_department_user, access_department_user,odoo_learn.model_learn_department,odoo_learn.group_Mordern_employee,1,0,1,0
+access_department_manager,access_department_manager,odoo_learn.model_learn_department,odoo_learn.group_Mordern_manager,1,1,1,1
+
+access_company_user, access_company_user,odoo_learn.model_learn_company,odoo_learn.group_Mordern_employee,1,0,1,0
+access_company_manager,access_company_manager,odoo_learn.model_learn_company,odoo_learn.group_Mordern_manager,1,1,1,1
+
+access_leave_reason_wizard_user,access_leave_reason_wizard_user,odoo_learn.model_reason_wizard,odoo_learn.group_Mordern_employee,1,1,1,1

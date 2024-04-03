@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_invoice_document_inherit_image" inherit_id="account.report_invoice_document">
+            <xpath expr="//t/div[2]/div/table/thead/tr/th[1]" position="before">
+                <th>Image</th>
+            </xpath>
+
+            <xpath expr="//t/div[2]/div/table/tbody/t[4]/tr/t/td[1]" position="before">
+                <td>
+                    <img t-attf-src="data:image/*;base64,{{line.product_id.image_1920}}" style="width:50%; height: 10%"/>
+                </td>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

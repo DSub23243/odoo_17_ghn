@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--KHAI BAO DANH MUC PHAN QUYEN-->
+        <record model="ir.module.category" id="Modern_category_access_right">
+            <field name="name">Moderns</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <!--KHAI BAO NHOM QUYEN-->
+        <record id="group_Mordern_employee" model="res.groups">
+            <field name="name">Modern employee user</field>
+            <field name="category_id" ref="odoo_learn.Modern_category_access_right"/>
+        </record>
+
+        <record id="group_Mordern_manager" model="res.groups">
+            <field name="name">Employee Manager</field>
+            <field name="category_id" ref="odoo_learn.Modern_category_access_right"/>
+            <field name="implied_ids" eval="[(4, ref('odoo_learn.group_Mordern_employee'))]"/>
+        </record>
+
+        <record id="owner_security_rule" model="ir.rule">
+            <field name="name">owner security rule</field>
+            <field ref="odoo_learn.model_learn_modern" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('odoo_learn.group_Mordern_employee'))]"/>
+            <!--<field name="global" eval="1"/> -->
+        </record>
+
+        <record id="owner_security_all_rule" model="ir.rule">
+            <field name="name">owner security rule</field>
+            <field ref="odoo_learn.model_learn_modern" name="model_id"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('odoo_learn.group_Mordern_manager'))]"/>
+            <!--<field name="global" eval="1"/> -->
+        </record>
+
+    </data>
+</odoo>

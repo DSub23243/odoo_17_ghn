@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.invoice.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_confirm']" position="after">
+                    <button string="View Invoices" type="object"
+                            name="action_view_related_invoices" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="action_view_order_invoices" model="ir.actions.act_window">
+            <field name="name">Invoices</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('partner_id', '=', active_id)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="sales_category">
+            <field name="name">Sales</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="group_sales_employee" model="res.groups">
+            <field name="name">Sale Employee</field>
+            <field name="category_id" ref="odoo_sale.sales_category"/>
+        </record>
+
+        <record id="group_sale_manager" model="res.groups">
+            <field name="name">sale Manager</field>
+            <field name="category_id" ref="odoo_sale.sales_category"/>
+            <field name="implied_ids" eval="[(4, ref('odoo_sale.group_sale_employee'))]"/>
+        </record>
+
+        <record id="owner_security_sale_rule" model="ir.rule">
+            <field name="name">Owner Security Sale Rule</field>
+            <field ref="odoo_sale.model_learn_sale" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('odoo_sale.group_sale_employee'))]"/>
+            <!--<field name="global" eval="1"/> -->
+        </record>
+        <record id="owner_security_sale_rule" model="ir.rule">
+            <field name="name">Owner Security Sale Rule</field>
+            <field ref="odoo_sale.model_learn_sale" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <!-- You can attach this rule to a specific group, Or make it Global -->
+            <field name="groups" eval="[(4, ref('odoo_sale.group_sale_employee'))]"/>
+            <!--<field name="global" eval="1"/> -->
+        </record>
+    </data>
+</odoo>

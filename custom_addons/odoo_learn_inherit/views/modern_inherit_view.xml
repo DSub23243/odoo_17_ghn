@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="Modern_inherit_form_inherit" model="ir.ui.view">
+            <field name="name">Modern Inherit Form</field>
+            <field name="model">learn.modern</field>
+            <field name="inherit_id" ref="odoo_learn.modern_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='age']" position="after">
+                    <field name="code"/>
+                </xpath>
+
+<!--                truy cập và ẩn thông tin bằng attributes-->
+<!--                <xpath expr="//field[@name='address']" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
+
+
+            </field>
+        </record>
+
+        <record id="Modern_inherit_tree_inherit" model="ir.ui.view">
+            <field name="name">Modern Tree Inherit</field>
+            <field name="model">learn.modern</field>
+            <field name="inherit_id" ref="odoo_learn.modern_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="code"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

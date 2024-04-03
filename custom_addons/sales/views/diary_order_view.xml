@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="action_open_diary_order_form" model="ir.actions.act_window">
+            <field name="name">Open Diary Order</field>
+            <field name="res_model">diary.order</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <record id="view_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='authorized_transaction_ids']" position="after">
+                    <button name="action_open_diary_order" string="Open Diary" type="object" invisible="invoice_status not in ['invoiced']"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+        <record id="diary_order_form_view" model="ir.ui.view">
+            <field name="name">diary_order.form</field>
+            <field name="model">diary.order</field>
+            <field name="arch" type="xml">
+                <form string="ModelTitle">
+                    <sheet>
+                        <field name="pricelist_id" invisible="1"/>
+                        <field name="avatar_128" invisible="1"/>
+                        <field name="avatar_1920" widget="image" class="oe_avatar" options='{"preview_image": "avatar_128"}' readonly="1"/>
+                        <field name="partner_id" invisible="1"/>
+                        <div class="oe_title mb24 mt-sm-4">
+                            <h1>
+                                <field id="company" options="{'line_breaks': False}" widget="text" class="text-break" name="name" default_focus="1" placeholder="e.g. Lumber Inc" readonly="1"/>
+                                <field name="company_id" invisible="1"/>
+                            </h1>
+                        </div>
+                        <hr/>
+                        <br/>
+                        <group>
+                            <group>
+                                <field name="order_code"/>
+                                <field name="c_email" invisible="c_email == False"/>
+                                <field name="c_email_template" invisible="c_email != False"/>
+                            </group>
+                            <group>
+                                <field name="c_phone" widget="CopyClipboardChar" invisible="c_phone == False"/>
+                                <field name="c_phone_template" widget="CopyClipboardChar" invisible="c_phone != False"/>
+                                <field name="c_mobile" widget="CopyClipboardChar" invisible="c_phone == False"/>
+                                <field name="c_mobile_template" widget="CopyClipboardChar" invisible="c_phone != False"/>
+                            </group>
+                        </group>
+                        <group>
+                            <div class="oe_title">
+                                <label for="amount_total"/>
+                                <h1>
+                                    <field name="amount_total" widget='monetary' readonly = "1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <notebook>
+                            <page string="Products">
+                                <field name="product_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="diary_order_tree_view" model="ir.ui.view">
+            <field name="name">diary_order.tree</field>
+            <field name="model">diary.order</field>
+            <field name="arch" type="xml">
+                <tree string="ModelTitle">
+                    <field name="name"/>
+                    <field name="order_code"/>
+                    <field name="date" optional="show" position="replace"/>
+                    <field name="c_email"/>
+                    <field name="c_phone"/>
+                    <field name="c_mobile"/>
+                    <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                    <field name="amount_total" sum="Sum Total" widget="monetary"/>
+                    <field name="currency_id" optional="hide"/>
+                    <field name="invoice_status"
+                           decoration-danger="invoice_status == 'no'"
+                           decoration-success="invoice_status == 'invoice'"
+                           widget="badge"
+                           optional="show"
+                    />
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="diary_order_act_window" model="ir.actions.act_window">
+            <field name="name">Diary Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">diary.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="sale_menu_action_diary_order_form" action="diary_order_act_window"
+                  parent="sale.menu_sales_config"
+                  name="Diary Orders"
+                  sequence="4"/>
+    </data>
+</odoo>
+
+

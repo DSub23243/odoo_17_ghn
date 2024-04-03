@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+Sale_Employee_User_Note,Sale_Employee_User_Note,sales.model_diary_order,sales.group_Sales_employee,1,1,1,1
+Sale_Employee_Manager_User_Note,Sale_Employee_Manager_User_Note,sales.model_diary_order,sales.group_Sales_manager,1,1,1,1

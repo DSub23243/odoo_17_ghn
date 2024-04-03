@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="Company_sequence" model="ir.sequence">
+            <field name="name">Modern Sequence</field>
+            <field name="code">company.seq</field>
+            <field name="prefix">T</field>
+            <field name="padding">7</field>
+        </record>
+
+    </data>
+</odoo>
