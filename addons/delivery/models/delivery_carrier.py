@@ -142,10 +142,8 @@ class DeliveryCarrier(models.Model):
         if not self._match_address(order.partner_shipping_id):
             return False
 
-        if self.delivery_type == 'base_on_rule':
-            return self.rate_shipment(order).get('success')
-        # if self.delivery_type == 'ghn_shipping':
-        #     return self.ghn_calculate_fee_wrapper(order)
+        # if self.delivery_type == 'base_on_rule':
+        #     return self.rate_shipment(order).get('success')
         return True
 
     def available_carriers(self, partner):
@@ -216,8 +214,10 @@ class DeliveryCarrier(models.Model):
         '''
         self.ensure_one()
         if hasattr(self, '%s_rate_shipment' % self.delivery_type):
+            print(self.delivery_type)
             res = getattr(self, '%s_rate_shipment' % self.delivery_type)(order)
             # apply fiscal position
+
             company = self.company_id or order.company_id or self.env.company
             res['price'] = self.product_id._get_tax_included_unit_price(
                 company,
@@ -228,6 +228,7 @@ class DeliveryCarrier(models.Model):
                 product_price_unit=res['price'],
                 product_currency=company.currency_id
             )
+
             # apply margin on computed price
             res['price'] = float(res['price']) * (1.0 + self.margin) + self.fixed_margin
             # save the real price in case a free_over rule overide it to 0
@@ -294,6 +295,8 @@ class DeliveryCarrier(models.Model):
     # ----------------------------------- #
     # Based on rule delivery type methods #
     # ----------------------------------- #
+
+
 
     def base_on_rule_rate_shipment(self, order):
         carrier = self._match_address(order.partner_shipping_id)

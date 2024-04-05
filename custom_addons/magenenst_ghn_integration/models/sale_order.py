@@ -205,32 +205,3 @@ class SaleOrder(models.Model):
         return content
 
 
-    def _check_carrier_quotation(self, force_carrier_id=None, keep_carrier=False):
-        all_services = self.env['delivery.carrier'].search([('id', '=', self.carrier_id.id)])
-        print(all_services)
-        for carrier in all_services:
-            if carrier.delivery_type != "ghn_shipping":
-                res = carrier.rate_shipment(self)
-                if res.get('success'):
-                    self.set_delivery_line(carrier, res['price'])
-                    self.delivery_rating_success = True
-                    self.delivery_message = res['warning_message']
-                else:
-                    self.set_delivery_line(carrier, 0.0)
-                    self.delivery_rating_success = False
-                    self.delivery_message = res['error_message']
-            else:
-                # Xử lý cho trường hợp ghn_shipping
-                choose_delivery_carrier_wizard = self.env['choose.delivery.carrier'].create({
-                    'order_id': self.id,
-                    'carrier_id': carrier.id,
-                })
-                delivery_cost = choose_delivery_carrier_wizard.ghn_calculate_fee()
-                print(delivery_cost)
-                total_fee = delivery_cost['data']['total']
-                self.set_delivery_line(carrier, total_fee)
-
-        custom_result = True
-
-        return custom_result
-

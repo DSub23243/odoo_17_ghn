@@ -613,37 +613,17 @@ class SaleOrder(models.Model):
                         break
                 self.write({'carrier_id': carrier.id})
             self._remove_delivery_line()
-            # if carrier:
-            #     res = carrier.rate_shipment(self)
-            #     if res.get('success'):
-            #         self.set_delivery_line(carrier, res['price'])
-            #         self.delivery_rating_success = True
-            #         self.delivery_message = res['warning_message']
-            #     else:
-            #         self.set_delivery_line(carrier, 0.0)
-            #         self.delivery_rating_success = False
-            #         self.delivery_message = res['error_message']
-            all_services = self.env['delivery.carrier'].search([('id', '=', carrier.id)])
-            for carrier in all_services:
-                if carrier.delivery_type != "ghn_shipping":
-                    res = carrier.rate_shipment(self)
-                    if res.get('success'):
-                        self.set_delivery_line(carrier, res['price'])
-                        self.delivery_rating_success = True
-                        self.delivery_message = res['warning_message']
-                    else:
-                        self.set_delivery_line(carrier, 0.0)
-                        self.delivery_rating_success = False
-                        self.delivery_message = res['error_message']
-                else:
-                    choose_delivery_carrier = self.env['choose.delivery.carrier'].create({
-                        'order_id': self.id,
-                        'carrier_id': carrier.id,
-                    })
-                    delivery_cost = choose_delivery_carrier.ghn_calculate_fee()
-                    print(delivery_cost)
-                    total_fee = delivery_cost['data']['total']
-                    self.set_delivery_line(carrier, total_fee)
+
+        if carrier:
+            res = carrier.rate_shipment(self)
+            if res.get('success'):
+                self.set_delivery_line(carrier, res['price'])
+                self.delivery_rating_success = True
+                self.delivery_message = res['warning_message']
+            else:
+                self.set_delivery_line(carrier, 0.0)
+                self.delivery_rating_success = False
+                self.delivery_message = res['error_message']
 
         return bool(carrier)
 

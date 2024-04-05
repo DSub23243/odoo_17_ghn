@@ -186,7 +186,8 @@ class ChooseDeliveryCarrier(models.TransientModel):
             "weight": self.weight,
             "width": self.width,
             "insurance_fee": int(amount_total),
-            "coupon": None
+            "coupon": None,
+
         }
         req = requests.post(request_url, data=json.dumps(data), headers=headers)
         req.raise_for_status()
@@ -203,7 +204,7 @@ class ChooseDeliveryCarrier(models.TransientModel):
     #         if line.is_delivery:
     #             service_fee = service_fee + line.price_subtotal
     #     return service_fee
-    #
+
     # def order_reward_amount(self):
     #     reward_amount = 0.0
     #     for line in self.order_id.order_line:
