@@ -104,6 +104,39 @@ class StockPicking(models.Model):
         content = req.json()
         return content
 
+
+    def print_ghn_order(self):
+        token_print = self.get_token_print()
+        request_url = f"https://dev-online-gateway.ghn.vn/a5/public-api/print80x80?token={token_print}"
+        return {
+            'type': 'ir.actions.act_url',
+            'url': request_url,
+            'target': 'new',
+        }
+
+
+
+    def get_token_print(self):
+        request_url = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/a5/gen-token"
+        ghn_token = self.env['ir.config_parameter'].sudo().get_param('ghn_token')
+        ghn_shop_id = self.sale_id.warehouse_id.ghn_shop_id
+        if ghn_shop_id and ghn_token:
+            headers = {
+                'Content-type': 'application/json',
+                'Token': ghn_token,
+                'shop_id': ghn_shop_id,
+            }
+        data = {
+            "order_codes": [self.sale_id.ghn_order_code],
+        }
+        req = requests.post(request_url, data=json.dumps(data), headers=headers)
+        req.raise_for_status()
+        content = req.json()
+        token = content.get('data', {}).get('token', None)
+        return token
+
+
+
 # class StockMoveLine(models.Model):
 #     _inherit = 'stock.move.line'
 

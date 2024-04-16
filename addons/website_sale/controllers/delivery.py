@@ -62,7 +62,6 @@ class WebsiteSaleDelivery(WebsiteSale):
         """
         order_sudo = request.website.sale_get_order()
         public_partner = request.website.partner_id
-
         self._include_country_and_state_in_address(partial_shipping_address)
         if order_sudo.partner_id == public_partner:
             # The partner_shipping_id and partner_invoice_id will be automatically computed when

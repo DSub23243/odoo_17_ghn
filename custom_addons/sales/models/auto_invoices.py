@@ -1,5 +1,5 @@
 from odoo import fields, models, api
-
+# from payment_demo import PaymentTransaction
 
 
 class AutoInvoices(models.Model):
@@ -19,9 +19,11 @@ class AutoInvoices(models.Model):
             'product_id': line.product_id.id,
             }) for line in self.order_line],
         })
-        # Xác nhận hóa đơn
-        invoice.action_post()
 
-        # Cập nhật trạng thái hóa đơn của đơn hàng
-        self.write({'invoice_status': 'invoiced'})
+        if self.invoice_status == "no":
+            self.write({'invoice_status': 'to invoice', 'state': 'sale'})
+            if self.invoice_status == 'to invoice':
+                self._create_invoices()
+                invoice.action_post()
+
         return True

@@ -34,3 +34,4 @@ class ResDistrict(models.Model):
                 vals['name'] = rec['DistrictName']
                 vals['ghn_district_id'] = rec['DistrictID']
                 self.env['res.district'].sudo().create(vals)
+

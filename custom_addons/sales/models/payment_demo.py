@@ -38,12 +38,15 @@ class PaymentTransaction(models.Model):
                     }
                     diary_order = self.env['diary.order'].create(diary_order_vals)
 
-                related_sale_order = self.env['sale.order'].search([('transaction_ids', 'in', self.id)], limit=1)
-                template = self.env.ref('account.email_template_edi_invoice', raise_if_not_found=False)
-                template_order = self.env.ref('sale.email_template_edi_sale', raise_if_not_found=False)
+                related_sale_order = self.env['sale.order'].search([('transaction_ids', 'in', self.id)], limit=5)
+                template = self.env.ref('account.email_template_edi_invoice', raise_if_not_found=True)
+                template_order = self.env.ref('sale.email_template_edi_sale', raise_if_not_found=True)
                 if template:
-                    template.send_mail(invoice.id, force_send=True, )
-                    template_order.send_mail(related_sale_order.id, force_send=True)
+
+                    # print(related_sale_order.partner_id.email)
+                    template_order.send_mail(related_sale_order.id, email_values=dict(email_to=related_sale_order.partner_id.email))
+                    template.send_mail(invoice.id, force_send=True, email_values=dict(email_to=related_sale_order.partner_id.email) )
+
                     _logger.info("Email hóa đơn đã được gửi cho %s", invoice.partner_id.name)
                 else:
                     _logger.error("Không tìm thấy mẫu email để gửi hóa đơn.")

@@ -20,8 +20,9 @@
                                 <field name="length" readonly="1" />
                                 <field name="width" readonly="1" />
                                 <field name="height" readonly="1" />
-                                <field name="convert_volume" readonly="1" />
+
                             </group>
+<!--                            <field name="convert_volume" readonly="1" />-->
                         </group>
 <!--                        <field name="ghn_order_code"  invisible="1"/>-->
 <!--                        <div>-->

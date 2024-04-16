@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
         ('2', 'Bên nhận trả phí'),
     ], string="Tùy chọn thanh toán", default="2", required=True)
     convert_volume = fields.Integer('Khối lượng quy đổi(gram)', required=True, default=0,
-                                    help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
+                                    help='Là khối lượng không gian gói hàng chiếm dụng được tính dựa theo công thức (DxRxC/5000)')
 
     def action_confirm(self):
         super(SaleOrder, self).action_confirm()
@@ -148,8 +148,8 @@ class SaleOrder(models.Model):
             else:
                 raise UserError(_('Vui lòng nhập nhập số điện thoai khách hàng(Liên hệ)'))
 
-        print(self.company_id.ward_id.name)
-        print(self.warehouse_id.partner_id.district_id.ghn_district_id)
+        # print(self.company_id.ward_id.name)
+        # print(self.warehouse_id.partner_id.district_id.ghn_district_id)
 
         items = []
         for line in self.order_line:
@@ -168,7 +168,7 @@ class SaleOrder(models.Model):
             }
             items.append(item)
 
-        print(items)
+
         data = {
             "payment_type_id": int(self.payment_type),
             "note": note,

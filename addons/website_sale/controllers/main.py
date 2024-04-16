@@ -1169,6 +1169,7 @@ class WebsiteSale(payment_portal.PaymentPortal):
     def values_postprocess(self, order, mode, values, errors, error_msg):
         new_values = {}
         authorized_fields = request.env['ir.model']._get('res.partner')._get_form_writable_fields()
+        print(authorized_fields)
         for k, v in values.items():
             # don't drop empty value, it could be a field to reset
             if k in authorized_fields and v is not None:
@@ -1268,12 +1269,12 @@ class WebsiteSale(payment_portal.PaymentPortal):
             pre_values = self.values_preprocess(kw)
             errors, error_msg = self.checkout_form_validate(mode, kw, pre_values)
             post, errors, error_msg = self.values_postprocess(order, mode, pre_values, errors, error_msg)
-
             if errors:
                 errors['error_message'] = error_msg
                 values = kw
             else:
                 update_mode, address_mode = mode
+
                 partner_id = self._checkout_form_save(mode, post, kw)
                 # We need to validate _checkout_form_save return, because when partner_id not in shippings
                 # it returns Forbidden() instead the partner_id
@@ -1319,6 +1320,7 @@ class WebsiteSale(payment_portal.PaymentPortal):
                     # Recompute taxes on fpos change
                     # TODO recompute all prices too to correctly manage price_include taxes ?
                     order._recompute_taxes()
+
 
                 if 'partner_id' in update_values:
                     # Force recomputation of pricelist on main customer address update
@@ -1369,7 +1371,6 @@ class WebsiteSale(payment_portal.PaymentPortal):
 
         order_sudo = request.website.sale_get_order()
         public_partner = request.website.partner_id
-
         # Update the partner with all the information
         self._include_country_and_state_in_address(billing_address)
         if order_sudo.partner_id == public_partner:
@@ -1400,7 +1401,7 @@ class WebsiteSale(payment_portal.PaymentPortal):
 
         if shipping_address:
             #in order to not override shippig address, it's checked separately from shipping option
-            self._include_country_and_state_in_address(shipping_address)
+            self._include_country_and_state_in_address()
 
             if order_sudo.partner_shipping_id.name.endswith(order_sudo.name):
                 # The existing partner was created by `process_express_checkout_delivery_choice`, it
@@ -1463,6 +1464,9 @@ class WebsiteSale(payment_portal.PaymentPortal):
         state = request.env["res.country.state"].search([
             ('code', '=', address.pop('state', '')),
         ], limit=1)
+        # district = request.env['res.district'].search([
+        #     ('state_ids', '=',  address.pop('state', ''))
+        # ])
         address.update(country_id=country, state_id=state)
 
     def _create_or_edit_partner(self, partner_details, edit=False, **custom_values):
@@ -1516,27 +1520,31 @@ class WebsiteSale(payment_portal.PaymentPortal):
         return partner_id
 
     def _get_country_related_render_values(self, kw, render_values):
-        """ Provide the fields related to the country to render the website sale form """
-        values = render_values['checkout']
-        mode = render_values['mode']
-        order = render_values['website_sale_order']
+            """ Provide the fields related to the country to render the website sale form """
+            values = render_values['checkout']
+            mode = render_values['mode']
+            order = render_values['website_sale_order']
 
-        def_country_id = order.partner_id.country_id
-        if order._is_public_order():
-            if request.geoip.country_code:
-                def_country_id = request.env['res.country'].search([('code', '=', request.geoip.country_code)], limit=1)
-            else:
-                def_country_id = request.website.user_id.sudo().country_id
+            def_country_id = order.partner_id.country_id
+            if order._is_public_order():
+                if request.geoip.country_code:
+                    def_country_id = request.env['res.country'].search([('code', '=', request.geoip.country_code)], limit=1)
+                else:
+                    def_country_id = request.website.user_id.sudo().country_id
 
-        country = 'country_id' in values and values['country_id'] != '' and request.env['res.country'].browse(int(values['country_id']))
-        country = country and country.exists() or def_country_id
+            country = 'country_id' in values and values['country_id'] != '' and request.env['res.country'].browse(int(values['country_id']))
+            country = country and country.exists() or def_country_id
 
-        res = {
-            'country': country,
-            'country_states': country.get_website_sale_states(mode=mode[1]),
-            'countries': country.get_website_sale_countries(mode=mode[1]),
-        }
-        return res
+            res = {
+                'country': country,
+                'country_states': country.get_website_sale_states(mode=mode[1]),
+                'countries': country.get_website_sale_countries(mode=mode[1]),
+            }
+            return res
+
+
+
+
 
     @http.route(['/shop/checkout'], type='http', auth="public", website=True, sitemap=False)
     def checkout(self, **post):
@@ -1936,15 +1944,25 @@ class WebsiteSale(payment_portal.PaymentPortal):
 
     @http.route(['/shop/country_infos/<model("res.country"):country>'], type='json', auth="public", methods=['POST'], website=True)
     def country_infos(self, country, mode, **kw):
+        # print(dict(
+        #     fields=country.get_address_fields(),
+        #     states=[(st.id, st.name,) for st in country.get_website_sale_states(mode=mode)],
+        #     Districts=[(st.id, st.name, st.code) for st in country.get_website_sale_districts(mode=mode)],
+        #     phone_code=country.phone_code,
+        #     zip_required=country.zip_required,
+        #     state_required=country.state_required,
+        # ))
         return dict(
             fields=country.get_address_fields(),
-            states=[(st.id, st.name, st.code) for st in country.get_website_sale_states(mode=mode)],
+            states=[(st.id, st.name,) for st in country.get_website_sale_states(mode=mode)],
+            # Districts=[(st.id) for st in country.get_website_sale_districts(mode=mode)],
             phone_code=country.phone_code,
             zip_required=country.zip_required,
             state_required=country.state_required,
         )
 
-    # --------------------------------------------------------------------------
+
+    # -------------------------------------------------------   -------------------
     # Products Recently Viewed
     # --------------------------------------------------------------------------
     @http.route('/shop/products/recently_viewed_update', type='json', auth='public', website=True)

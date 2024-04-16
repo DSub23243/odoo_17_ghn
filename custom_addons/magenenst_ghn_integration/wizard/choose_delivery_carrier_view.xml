@@ -9,15 +9,12 @@
 <!--                <separator string="volume"/>-->
                 <field name="weight" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
                 <separator string="Or volume Converted" invisible="delivery_type != 'ghn_shipping'"/>
-                <field name="length" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
-                <field name="width" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
-                <field name="height" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
-                <div class="float-right" invisible = "delivery_type != 'ghn_shipping'">
-                    <label for="convert_volume" />:
-                    <span><field name="convert_volume" readonly="1" />g</span>
-                </div>
-<!--                <separator/>-->
-<!--                <separator string="Payment"/>-->
+                    <field name="length" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
+                    <field name="width" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
+                    <field name="height" required="1" invisible = "delivery_type != 'ghn_shipping'"/>
+                    <field name="convert_volume" readonly="1" invisible="delivery_type != 'ghn_shipping'"/>
+                <separator/>
+                <separator string="Payment"/>
                 <field name="payment_type" widget="selection" invisible = "delivery_type != 'ghn_shipping'"/>
                 <field name="required_note" widget="selection" invisible = "delivery_type != 'ghn_shipping'"/>
             </xpath>

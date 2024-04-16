@@ -54,11 +54,13 @@ class TestWebsiteSaleDeliveryController(PaymentCommon, SaleCommon):
                 'state_ids': [(6, 0, [MX.state_ids.ids[0]])]
         })
 
+
         country_info = self.Controller.country_infos(country=MX, mode="shipping")
         self.assertEqual(len(country_info['states']), len(MX.state_ids))
 
         country_info = self.Controller.country_infos(country=US, mode="shipping")
         self.assertEqual(len(country_info['states']), 0)
+
 
     def test_available_methods(self):
         self.env['delivery.carrier'].search([]).action_archive()
