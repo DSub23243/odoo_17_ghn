@@ -27,11 +27,6 @@ export const WebsiteSale = publicWidget.Widget.extend(VariantMixin, cartHandlerM
         'touchend form.js_add_cart_json label': '_onMouseupAddCartLabel',
         'submit .o_wsale_products_searchbar_form': '_onSubmitSaleSearch',
         'change select[name="country_id"]': '_onChangeCountry',
-
-        'change select[name="state_id"]': '_onChangeState',
-        'change select[name="district_id"]': '_onChangeDistrict',
-
-
         'change #shipping_use_same': '_onChangeShippingUseSame',
         'click .toggle_summary': '_onToggleSummary',
         'click #add_to_cart, .o_we_buy_now, #products_grid .o_wsale_product_btn .a-submit': 'async _onClickAdd',
@@ -261,7 +256,6 @@ export const WebsiteSale = publicWidget.Widget.extend(VariantMixin, cartHandlerM
                         selectStates.append(opt);
                     });
                     selectStates.parent('div').show();
-
                 } else {
                     selectStates.val('').parent('div').hide();
                 }
@@ -293,86 +287,6 @@ export const WebsiteSale = publicWidget.Widget.extend(VariantMixin, cartHandlerM
             }
         });
     },
-
-
-//    _onChangeState: function (ev) {
-//            var stateId = $(ev.currentTarget).val();
-//            if (stateId) {
-//                this._updateDistricts(stateId);
-//            } else {
-//                this._clearDistricts();
-//            }
-//        },
-//
-//        /**
-//         * Gửi yêu cầu tới server để lấy các quận/huyện theo state được chọn.
-//         */
-//        _updateDistricts: function (stateId) {
-//            var self = this;
-//            this.rpc('/shop/get_districts/' + stateId).then(function (data) {
-//                var $districtSelect = self.$('select[name="district_id"]');
-//                $districtSelect.empty();
-//                $districtSelect.append($('<option/>', {
-//                    value: '',
-//                    text: 'District...'
-//                }));
-//                data.forEach(function (item) { // Sửa tại đây: bỏ đi tham số data đầu tiên
-//                    $districtSelect.append($('<option/>', {
-//                        value: item.id,
-//                        text: item.name
-//                    }));
-//                });
-//            });
-//        },
-//
-//        _clearDistricts: function () {
-//            var $districtSelect = this.$('select[name="district_id"]');
-//            $districtSelect.empty();
-//            $districtSelect.append($('<option/>', {
-//                value: '',
-//                text: 'District...'
-//            }));
-//        },
-//
-////        -----------------------------------------------------------------------------------
-//
-//
-//        _onChangeDistrict: function (ev) {
-//            var districtId = $(ev.currentTarget).val();
-////            console.log(districtId)
-//            if (districtId) {
-//                this._updateWard(districtId);
-//            } else {
-//                this._clearWard();
-//            }
-//        },
-//        _updateWard: function (districtId) {
-//            var self = this;
-//            this.rpc('/shop/get_wards/' + districtId).then(function (data) {
-//                var $wardSelect = self.$('select[name="ward_id"]');
-//                $wardSelect.empty();
-//                $wardSelect.append($('<option/>', {
-//                    value: '',
-//                    text: 'Ward...'
-//                }));
-//                data.forEach(function (item) { // Sửa tại đây: bỏ đi tham số data đầu tiên
-//                    $wardSelect.append($('<option/>', {
-//                        value: item.id,
-//                        text: item.name
-//                    }));
-//                });
-//            });
-//        },
-//
-//        _clearWard: function () {
-//            var $wardSelect = this.$('select[name="ward_id"]');
-//            $wardSelect.empty();
-//            $wardSelect.append($('<option/>', {
-//                value: '',
-//                text: 'Ward...'
-//            }));
-//        },
-
     /**
      * This is overridden to handle the "List View of Variants" of the web shop.
      * That feature allows directly selecting the variant from a list instead of selecting the
@@ -1075,7 +989,6 @@ publicWidget.registry.websiteSaleProductPageReviews = publicWidget.Widget.extend
     },
 });
 
-
 export default {
     WebsiteSale: publicWidget.registry.WebsiteSale,
     WebsiteSaleLayout: publicWidget.registry.WebsiteSaleLayout,
@@ -1083,4 +996,3 @@ export default {
     WebsiteSaleCarouselProduct: publicWidget.registry.websiteSaleCarouselProduct,
     WebsiteSaleProductPageReviews: publicWidget.registry.websiteSaleProductPageReviews,
 };
-

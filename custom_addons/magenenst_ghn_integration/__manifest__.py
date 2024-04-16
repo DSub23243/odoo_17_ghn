@@ -5,13 +5,14 @@
     'sequence':'10',
     'category': 'Extra Tools',
     'version': '1.0',
-    'depends': ['base','contacts', 'sale', 'delivery', 'stock'],
+    'depends': ['base','contacts', 'sale', 'delivery', 'stock', 'website_sale'],
     'data': [
         'security/ir.model.access.csv',
         # 'security/security.xml',
         'data/ghn_cron_job.xml',
         # 'wizard/create_appointment.xml',
         # 'views/patient.xml',
+
         'views/res_partner.xml',
         'views/delivery_carrier.xml',
         'views/res_company.xml',
@@ -23,15 +24,22 @@
         'views/stock_warehouse.xml',
         'views/res_country_state.xml',
         'views/lunch_call_api.xml',
+        'views/templates.xml',
         # 'reports/appointment.xml',
         'wizard/choose_delivery_carrier_view.xml',
 
     ],
+
     'demo': [],
     'qweb': [],
     'auto_install': False, # this module will automatically be installed if all of its dependencies are installed
     'installable': True,
     'application': True, # application or technical module
     'auto_install': False,
+    'assets': {
+        'web.assets_frontend': [
+            'magenenst_ghn_integration/static/src/js/custom_website_sale.js',
 
+        ],
+    },
 }
