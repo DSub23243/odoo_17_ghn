@@ -18,9 +18,7 @@
                         <option t-att-value="ward['id']" t-else="">
                             <t t-esc="ward['name']"/>
                         </option>
-                        <option t-att-value="">
 
-                        </option>
                     </t>
                 </select>
             </div>

@@ -9,9 +9,9 @@ class SaleOrder(models.Model):
     ghn_order_code = fields.Char('GHN Order Code', store=True)
 
     weight = fields.Integer('Khối lượng(gram)', default=1, help='Tổng khối lượng sản phẩm')
-    length = fields.Integer('Chiều dài(cm)', default=1, help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
-    width = fields.Integer('chiều rộng(cm)', default=1, help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
-    height = fields.Integer('chiều cao(cm)', default=1, help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
+    length = fields.Integer(compute='_compute_dimensions', string='Chiều dài(cm)', default=1, help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
+    width = fields.Integer(compute='_compute_dimensions', string='chiều rộng(cm)', default=1, help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
+    height = fields.Integer(compute='_compute_dimensions', string='chiều cao(cm)', default=1, help='Là khối lượng được tính dựa theo công thức (DxRxC/5000)')
     required_note = fields.Selection([
         ('KHONGCHOXEMHANG', 'Không cho xem hàng'),
         ('CHOXEMHANGKHONGTHU', 'Cho xem không cho thử'),
@@ -24,6 +24,20 @@ class SaleOrder(models.Model):
     convert_volume = fields.Integer('Khối lượng quy đổi(gram)', required=True, default=0,
                                     help='Là khối lượng không gian gói hàng chiếm dụng được tính dựa theo công thức (DxRxC/5000)')
 
+    @api.model
+    def _compute_dimensions(self):
+        for order in self:
+            total_length = 0
+            total_width = 0
+            total_height = 0
+            for line in order.order_line:
+                product = line.product_id.product_tmpl_id
+                total_length += product.length * line.product_uom_qty
+                total_width += product.width * line.product_uom_qty
+                total_height += product.height * line.product_uom_qty
+            order.length = total_length
+            order.width = total_width
+            order.height = total_height
     def action_confirm(self):
         super(SaleOrder, self).action_confirm()
         is_delivery = False
@@ -150,7 +164,6 @@ class SaleOrder(models.Model):
 
         # print(self.company_id.ward_id.name)
         # print(self.warehouse_id.partner_id.district_id.ghn_district_id)
-
         items = []
         for line in self.order_line:
             item = {

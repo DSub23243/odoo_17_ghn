@@ -1009,7 +1009,6 @@ class WebsiteSale(payment_portal.PaymentPortal):
         order = order or request.website.sale_get_order(force_create=True)
         bill_partners = []
         ship_partners = []
-
         if not order._is_public_order():
             Partner = order.partner_id.with_context(show_address=1).sudo()
             commercial_partner = order.partner_id.commercial_partner_id
@@ -2072,6 +2071,7 @@ class CustomerPortal(sale_portal.CustomerPortal):
             return request.redirect('/my')
 
         currency = request.env['website'].get_current_website().currency_id
+
         result = {
             'currency': currency.id,
             'products': [],

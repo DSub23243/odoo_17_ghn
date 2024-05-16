@@ -330,6 +330,8 @@ class PaymentProvider(models.Model):
         providers._check_required_if_provider()
         return providers
 
+
+
     def write(self, values):
         # Handle provider state changes.
         deactivated_providers = self.env['payment.provider']
@@ -701,3 +703,4 @@ class PaymentProvider(models.Model):
         """
         self.ensure_one()
         return []
+

@@ -620,6 +620,7 @@ export const WebsiteSale = publicWidget.Widget.extend(VariantMixin, cartHandlerM
         if ($input.data('update_change')) {
             return;
         }
+
         var value = parseInt($input.val() || 0, 10);
         if (isNaN(value)) {
             value = 1;

@@ -28,6 +28,7 @@ class CustomWebsiteSale(WebsiteSale):
             partner_id = (
                 Partner.sudo().with_context(tracking_disable=True).create(checkout).id
             )
+
         elif mode[0] == "edit":
             partner_id = int(all_values.get("partner_id", 0))
             if partner_id:
@@ -45,12 +46,12 @@ class CustomWebsiteSale(WebsiteSale):
         return partner_id
 
     def _get_country_related_render_values(self, kw, render_values):
-        """Provide the fields related to the country to render the website sale form, including districts and wards."""
         values = super(CustomWebsiteSale, self)._get_country_related_render_values(
             kw, render_values
         )
         partner_id = kw.get("partner_id")
-        if partner_id:
+        mode = kw.get("mode")
+        if partner_id and mode == "billing":
             partner = (
                 request.env["res.partner"]
                 .sudo()
@@ -77,11 +78,13 @@ class CustomWebsiteSale(WebsiteSale):
         website=True,
     )
     def get_districts(self, state_id):
+
         districts = (
             request.env["res.district"].sudo().search([("state_id", "=", state_id)])
         )
+
         districts_data = [
-            {"id": district.id, "name": district.name} for district in districts
+            {"id": district.id, "name": district.name, "ghn_district_id": district.ghn_district_id} for district in districts
         ]
         return districts_data
 

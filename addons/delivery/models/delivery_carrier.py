@@ -214,7 +214,7 @@ class DeliveryCarrier(models.Model):
         '''
         self.ensure_one()
         if hasattr(self, '%s_rate_shipment' % self.delivery_type):
-            print(self.delivery_type)
+            # print(self.delivery_type)
             res = getattr(self, '%s_rate_shipment' % self.delivery_type)(order)
             # apply fiscal position
 

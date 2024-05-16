@@ -23,7 +23,6 @@ class ResDistrict(models.Model):
         req = requests.get(request_url, headers=headers)
         req.raise_for_status()
         content = req.json()
-        print(content)
         data = content['data']
         for rec in data:
             existed_state = self.env['res.country.state'].sudo().search([('ghn_province_id', '=', rec['ProvinceID'])], limit=1)

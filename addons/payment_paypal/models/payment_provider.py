@@ -34,6 +34,13 @@ class PaymentProvider(models.Model):
                 lambda c: c.name in const.SUPPORTED_CURRENCIES
             )
         return supported_currencies
+    # def _get_supported_currencies(self):
+    #     supported_currenties = super()._get_supported_currencies()
+    #     if self.code == "paypal":
+    #         supported_currenties = supported_currenties.filtered(
+    #             lambda a: a.name in const.SUPPORTED_CURRENCIES
+    #         )
+    #     return supported_currenties
 
     def _paypal_get_api_url(self):
         """ Return the API URL according to the provider state.

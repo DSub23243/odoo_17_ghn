@@ -10,3 +10,5 @@ from . import stock_picking
 from . import res_config_settings
 from . import stock_warehouse
 from . import res_country
+from . import product_product
+from . import custom_sale_order

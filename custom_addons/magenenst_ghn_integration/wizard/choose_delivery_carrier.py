@@ -10,6 +10,7 @@ class ChooseDeliveryCarrier(models.TransientModel):
     # _name = 'choose.delivery.carrier.inherit'
     _inherit = 'choose.delivery.carrier'
 
+    order_id = fields.Many2one('sale.order', string="Sale Order")
     weight = fields.Integer('Khối lượng(gram)', required=True, default=1, help='Tổng khối lượng sản phẩm')
     length = fields.Integer('Chiều dài(cm)', required=True, default=1)
     width = fields.Integer('chiều rộng(cm)', required=True, default=1)
@@ -69,6 +70,41 @@ class ChooseDeliveryCarrier(models.TransientModel):
                 'convert_volume': self.convert_volume,
             })
 
+    def caculate_weight(self):
+        if self.weight <= 0:
+            raise UserError(_('Khối lượng gói hàng phải lớn hơn 0.'))
+        # self.convert_volume = (self.height  self.width  self.length) / 5
+        if self.carrier_id.service:
+            self.convert_volume = (self.height * self.width * self.length) / 5
+            available_service = self.ghn_available_service()
+            match_service = False
+            if 'data' in available_service:
+                for data in available_service['data']:
+                    if data['service_type_id'] == int(self.carrier_id.service):
+                        match_service = True
+            if match_service:
+                calculate_fee = self.ghn_calculate_fee()
+                if 'data' in calculate_fee:
+                    if 'total' in calculate_fee['data']:
+                        ghn_fee = calculate_fee['data']['total']
+                        if ghn_fee:
+                            amount_total = self.product_sale_ok_amount_total()
+                            if amount_total > PHI_KHAI_GIA:
+                                self.display_price = ghn_fee + (amount_total / 100) * 0.5
+                            else:
+                                self.display_price = ghn_fee
+                        else:
+                            self.display_price = ghn_fee
+            else:
+                raise UserError(
+                    _('Phương thức vận chuyển này hiện chưa hỗ trợ cho địa điểm nhận hàng, Vui lòng chọn phương thức vận chuyển khác.'))
+            self.order_id.write({
+                'weight': self.weight,
+                'length': self.length,
+                'width': self.width,
+                'height': self.height,
+                'convert_volume': self.convert_volume,
+            })
     def button_confirm(self):
         if self.weight <= 0:
             raise UserError(_('Khối lượng gói hàng phải lớn hơn 0.'))
@@ -139,6 +175,7 @@ class ChooseDeliveryCarrier(models.TransientModel):
             content['data']['insurance_fee'] = data['insurance_fee']
         return content
 
+
     def ghn_calculate_fee(self):
         request_url = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee"
         ghn_token = self.env['ir.config_parameter'].sudo().get_param('ghn_token')
@@ -174,7 +211,7 @@ class ChooseDeliveryCarrier(models.TransientModel):
 
         if amount_total > GHN_MAX_INSURANCE_FEE:
             raise UserError(_('Chính sách của Giao hàng nhanh chỉ cho phép giá trị hàng hóa tối đa 10.000.000 đồng.'))
-
+        print(self.height)
         data = {
             "from_district_id": from_district_id,
             "from_ward_id": from_ward_id,

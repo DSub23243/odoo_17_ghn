@@ -5,7 +5,7 @@
     'sequence':'10',
     'category': 'Extra Tools',
     'version': '1.0',
-    'depends': ['base','contacts', 'sale', 'delivery', 'stock', 'website_sale'],
+    'depends': ['base','contacts', 'sale', 'delivery', 'stock', 'website_sale', 'product'],
     'data': [
         'security/ir.model.access.csv',
         # 'security/security.xml',
@@ -25,6 +25,7 @@
         'views/res_country_state.xml',
         'views/lunch_call_api.xml',
         'views/templates.xml',
+        'views/product_view.xml',
         # 'reports/appointment.xml',
         'wizard/choose_delivery_carrier_view.xml',
 
